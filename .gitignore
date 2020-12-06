@@ -363,3 +363,9 @@ FodyWeavers.xsd
 
 #VSCode settings
 .vscode
+
+#Migrations
+Migrations/
+
+#Sql
+Sql/

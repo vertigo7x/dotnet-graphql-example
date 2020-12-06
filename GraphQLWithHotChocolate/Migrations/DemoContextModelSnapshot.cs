@@ -15,6 +15,20 @@ namespace GraphQLWithHotChocolate.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.0");
 
+            modelBuilder.Entity("GraphQLWithHotChocolate.Models.Author", b =>
+                {
+                    b.Property<int>("AuthorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("AuthorId");
+
+                    b.ToTable("Authors");
+                });
+
             modelBuilder.Entity("GraphQLWithHotChocolate.Models.Blog", b =>
                 {
                     b.Property<int>("BlogId")
@@ -35,6 +49,9 @@ namespace GraphQLWithHotChocolate.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("BlogId")
                         .HasColumnType("INTEGER");
 
@@ -46,6 +63,8 @@ namespace GraphQLWithHotChocolate.Migrations
 
                     b.HasKey("PostId");
 
+                    b.HasIndex("AuthorId");
+
                     b.HasIndex("BlogId");
 
                     b.ToTable("Posts");
@@ -53,11 +72,19 @@ namespace GraphQLWithHotChocolate.Migrations
 
             modelBuilder.Entity("GraphQLWithHotChocolate.Models.Post", b =>
                 {
+                    b.HasOne("GraphQLWithHotChocolate.Models.Author", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("GraphQLWithHotChocolate.Models.Blog", "Blog")
                         .WithMany("Posts")
                         .HasForeignKey("BlogId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Author");
 
                     b.Navigation("Blog");
                 });

@@ -42,7 +42,7 @@ namespace GraphQLWithHotChocolate {
                 // CONSULTA DE DATOS REST
                 endpoints.MapGet ("/getBlogs", async context => {
                     using (var db = new DemoContext ()) {
-                        var result = db.Blogs.Include (blog => blog.Posts).ToListAsync ();
+                        var result = db.Blogs.Include (blog => blog.Posts).ThenInclude(post => post.Author).ToListAsync ();
                         string json = JsonSerializer.Serialize (result, options);
                         await context.Response.WriteAsync (json);
                     }
